@@ -32,9 +32,7 @@ class TestOrder:
         response = order.create_order(order_data)
         assert response.status_code == 201 and 'track' in response.json()
 
-        order_track_num = order.get_order_track_num()
-        data = order.get_order_by_track_num(order_track_num)
-        order_id = order.get_order_id_by_track_num(data)
+        order_id = order.get_order_id()
         courier_id = created_courier.get_courier_id()
 
         response = order.accept_order(order_id, courier_id)
@@ -52,7 +50,7 @@ class TestOrder:
         response = order.accept_order(order_id=order_id, courier_id=courier_id)
         assert response.status_code == 404 and response.json()['message'] == "Заказа с таким id не существует"
 
-    @allure.title('Принять заказ курьером с несуществующим id заказа')
+    @allure.title('Принять заказ с несуществующим id курьера')
     def test_accept_order_nonexistent_courier_id_failure(self, created_courier):
         order = Order()
         order_data = helper.generate_order_data(['BLACK'])
@@ -64,7 +62,7 @@ class TestOrder:
         response = order.accept_order(order_id, courier_id)
         assert response.status_code == 404 and response.json()['message'] == "Курьера с таким id не существует"
 
-    @allure.title('Принять заказ курьером с ПУСТЫМ id заказа')
+    @allure.title('Принять заказ курьером с пустым id заказа')
     def test_accept_order_empty_courier_id_failure(self, created_courier):
         order = Order()
         order_data = helper.generate_order_data(['BLACK'])
@@ -76,14 +74,14 @@ class TestOrder:
         response = order.accept_order(order_id, courier_id)
         assert response.status_code == 400 and response.json()['message'] == "Недостаточно данных для поиска"
 
-    @allure.title('Принять заказ курьером с пустым id курьера')
+    @allure.title('Принять заказ с пустым id курьера')
     def test_accept_order_empty_courier_id_failure(self, created_courier):
         order = Order()
         order_data = helper.generate_order_data(['BLACK'])
         order.create_order(order_data)
 
         courier_id = ''
-        order_id = order.get_order_track_num()
+        order_id = order.get_order_id()
 
         response = order.accept_order(order_id, courier_id)
         assert response.status_code == 400 and response.json()['message'] == "Недостаточно данных для поиска"
@@ -105,7 +103,7 @@ class TestOrder:
         order = Order()
         order_data = helper.generate_order_data(['BLACK'])
         order.create_order(order_data)
-        order_id = order.get_order_track_num()
+        order_id = order.get_order_id()
 
         response = order.get_order_by_track_num(order_id)
         assert response.status_code == 200 and 'order' in response.json()

@@ -10,8 +10,9 @@ logging.basicConfig(level=logging.DEBUG)
 
 class Order:
     def __init__(self):
-        self.order_track_num = None
-        self.order_id = None
+        self.track_num = None
+        self.id = None
+        self.data = {}
 
     @allure.step('Создание заказа')
     def create_order(self, data):
@@ -19,7 +20,10 @@ class Order:
         logger.debug(f"POST create order with data: {data}, URL: {url_create_order}")
 
         response = requests.post(url_create_order, json=data)
-        self.order_track_num = response.json()['track']
+
+        self.track_num = response.json()['track']
+        self.data = self.get_order_by_track_num(self.track_num)
+        self.id = self.get_order_id_by_track_num(self.data)
 
         return response
 
@@ -41,16 +45,24 @@ class Order:
         logger.debug(f"PUT request to cancel order, URL: {url_cancel_order}, data: {data}")
         return requests.put(url_cancel_order, data=data)
 
-    @allure.step('Получить номер заказа объекта Order()')
-    def get_order_track_num(self):
-        if self.order_track_num:
-            return self.order_track_num
-        return None
-
     @allure.step('Получение заказа по номеру')
     def get_order_by_track_num(self, order_track_num: int = None):
-        return requests.get(f"{url.BASE_URL}{url.GET_ORDER_BY_ID}?t={order_track_num}")
+        url_1 = f"{url.BASE_URL}{url.GET_ORDER_BY_ID}?t={order_track_num}"
+        aaa = requests.get(url_1)
+        return aaa
 
-    def get_order_id_by_track_num(self, data: dict):
-        a = data.json()['order']['id']
-        return a
+    @allure.step('Получение id заказа по номеру')
+    def get_order_id_by_track_num(self, data):
+        return data.json()['order']['id']
+
+    @allure.step('Получение id заказа')
+    def get_order_id(self):
+        if self.id:
+            return self.id
+        return None
+
+    @allure.step('Получить трек-номер заказа')
+    def get_order_track_num(self):
+        if self.track_num:
+            return self.track_num
+        return None
