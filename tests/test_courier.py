@@ -6,6 +6,7 @@ from conftest import created_courier, courier_delete_after_use
 
 @allure.epic('Тестирование API аккаунта курьера сервиса "Yandex Самокат"')
 class TestCreateCourier:
+
     @allure.title('Проверка регистрации курьера с корректными данными')
     def test_create_courier_success(self, courier_delete_after_use):
         courier_delete_after_use = Courier()

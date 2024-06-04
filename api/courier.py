@@ -7,6 +7,7 @@ import helpers.urls as url
 
 
 class Courier:
+
     def __init__(self):
         self.data = None
         self.account_id = None

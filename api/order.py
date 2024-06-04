@@ -9,6 +9,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class Order:
+
     def __init__(self):
         self.track_num = None
         self.id = None
@@ -51,9 +52,7 @@ class Order:
 
     @allure.step('Получение заказа по номеру')
     def get_order_by_track_num(self, order_track_num: int = None):
-        url_1 = f"{url.BASE_URL}{url.GET_ORDER_BY_ID}?t={order_track_num}"
-        aaa = requests.get(url_1)
-        return aaa
+        return requests.get(f"{url.BASE_URL}{url.GET_ORDER_BY_ID}?t={order_track_num}")
 
 
     @allure.step('Получение id заказа по номеру')

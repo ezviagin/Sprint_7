@@ -12,6 +12,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 @allure.epic('Тестирование API заказа самоката сервиса "Yandex Самокат"')
 class TestOrder:
+
     @allure.title('Проверка создания заказа с корректными данными')
     @pytest.mark.parametrize('color', (['BLACK'], ['GREY'], ['BLACK', 'GREY'], ''))
     def test_create_order_success(self, color: list):
@@ -105,14 +106,14 @@ class TestOrder:
         assert response.status_code == 409 and response.json()['message'] == "Этот заказ уже в работе"
 
 
-    @allure.title('Найти данные заказа по id заказа')
-    def test_get_order_by_id_success(self):
+    @allure.title('Найти данные заказа по track number заказа')
+    def test_get_order_by_track_success(self):
         order = Order()
         order_data = helper.generate_order_data(['BLACK'])
         order.create_order(order_data)
-        order_id = order.get_order_id()
+        order_num = order.get_order_track_num()
 
-        response = order.get_order_by_track_num(order_id)
+        response = order.get_order_by_track_num(order_num)
         assert response.status_code == 200 and 'order' in response.json()
 
 
