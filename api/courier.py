@@ -11,6 +11,7 @@ class Courier:
         self.data = None
         self.account_id = None
 
+
     @allure.step('Создание тестовых данных заказа')
     def __generate_courier_account_data(self):
         def generate_random_string(length):
@@ -30,27 +31,33 @@ class Courier:
 
         return data
 
+
     @allure.step('Получение логина курьера')
     def get_login(self):
         return self.data['login']
+
 
     @allure.step('Получение пароля курьера')
     def get_password(self):
         return self.data['password']
 
+
     @allure.step('Получение имени курьера')
     def get_name(self):
         return self.data['name']
 
+
     @allure.step('Получение данных курьера (логин, пароль, имя)')
     def get_account_data(self):
         return self.data
+
 
     @allure.step('Создание курьера')
     def create_courier(self, login: str = '', password: str = '', name: str = ''):
         if login == '' and password == '' and name == '':
             self.data = self.__generate_courier_account_data()
         return requests.post(f"{url.BASE_URL}{url.CREATE_COURIER}", json=self.data)
+
 
     @allure.step('Логин курьера')
     def login_courier(self,  login: str = '', password: str = ''):
@@ -66,9 +73,11 @@ class Courier:
             }
         return requests.post(f"{url.BASE_URL}{url.LOGIN_COURIER}", json=data)
 
+
     @allure.step('Удаление курьера')
     def delete_courier(self, courier_id=None):
         return requests.delete(f"{url.BASE_URL}{url.DELETE_COURIER}/{courier_id}")
+
 
     @allure.step('Получение id курьера')
     def get_courier_id(self, login='', password=''):
