@@ -11,3 +11,9 @@ def created_courier():
     courier.delete_courier(courier.get_courier_id())
 
 
+@pytest.fixture(scope='function')
+def courier_delete_after_use():
+    courier = None
+    yield courier
+    if courier:
+        courier.delete_courier(courier.get_courier_id())
