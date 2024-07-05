@@ -1,0 +1,6 @@
+allure-pytest
+faker
+logger
+pytest
+pytest-xdist
+requests
